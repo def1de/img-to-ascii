@@ -48,7 +48,7 @@ fn main() {
     });
 
     // Load the image and convert it to grayscale
-    let grayscale = image::open(&img_path).unwrap().grayscale().to_rgb8();
+    let grayscale = image::open(&img_path).unwrap().to_luma8();
 
     // Send a message to the channel to stop the progress bar
     tx.send(()).unwrap();
