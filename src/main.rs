@@ -48,7 +48,13 @@ fn main() {
     });
 
     // Load the image and convert it to grayscale
-    let grayscale = image::open(&img_path).unwrap().to_luma8();
+    let grayscale =  match image::open(&img_path){
+        Ok(img) => img.to_luma8(),
+        Err(err) => {
+            eprintln!("Failed to open the image\nPerhaps the image path is incorrect or the image is not supported\nError: {}", err);
+            std::process::exit(1);
+        }
+    };
 
     // Send a message to the channel to stop the progress bar
     tx.send(()).unwrap();
@@ -100,6 +106,6 @@ fn main() {
         ascii_image.push_str(&ascii_string);
     }
     pb2.finish_with_message("Done!");
-    print!("{}[2J", 27 as char); // Clear the terminal
+    print!("{}[2J", 27_u8 as char); // Clear the terminal
     println!("{}", ascii_image);
 }
